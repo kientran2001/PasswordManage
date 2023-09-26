@@ -1,4 +1,4 @@
-package com.example.PasswordManage.service;
+package com.example.PasswordManage.services;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.PasswordManage.model;
+package com.example.PasswordManage.models;
 
 import lombok.Data;
 
@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "accounts")
 @Data
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,4 +20,13 @@ public class Account {
     private String pass;
 
     private String web;
+
+    public Account(){}
+
+    public Account(int userId, String acc, String pass, String web) {
+        this.userId = userId;
+        this.acc = acc;
+        this.pass = pass;
+        this.web = web;
+    }
 }

@@ -1,6 +1,6 @@
-package com.example.PasswordManage.repository;
+package com.example.PasswordManage.repositories;
 
-import com.example.PasswordManage.model.Account;
+import com.example.PasswordManage.models.Account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
