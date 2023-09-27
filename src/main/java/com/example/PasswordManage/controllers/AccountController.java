@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Controller
 @RequestMapping(path = "account")
@@ -109,16 +110,30 @@ public class AccountController {
         str = keyLoad.toString();
         seed = str.substring(str.length() - 16);
 
+
         String pass = account.get().getPass();
         byte[] encryptPass = Base64.getDecoder().decode(pass);
         try {
+            KeySpec spec = new PBEKeySpec(masterPassword.toCharArray(), seed.getBytes(), 65536, 128);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            key = factory.generateSecret(spec);
             String decryptPass = EncodeService.decrypt(encryptPass, key, seed.getBytes());
             account.get().setPass(decryptPass);
-            modelMap.addAttribute("account", account);
+            modelMap.addAttribute("account", account.get());
             return "detailAccount";
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
             return "redirect";
         }
+    }
+
+    @RequestMapping(value = "/deleteAccount/{id}", method = RequestMethod.POST)
+    public String deleteAccount(ModelMap modelMap, @PathVariable int id) {
+        Optional<Account> account = accountRepository.findById(id);
+        int userId = account.get().getUserId();
+        Optional<User> user = userRepository.findById(userId);
+        System.out.println("Delete!!!");
+        accountRepository.deleteById(id);
+        return "redirect:../allAccounts/" + userId + "." + masterPassword + "." + user.get().getHmac();
     }
 }
